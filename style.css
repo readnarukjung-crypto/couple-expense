@@ -1,0 +1,69 @@
+/* พื้นหลังเว็บ */
+body{
+    font-family: "Segoe UI", sans-serif;
+    max-width: 420px;
+    width: 100%;
+    margin: auto;
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    padding: 15px;
+}
+
+/* หัวข้อ */
+h1{
+    text-align:center;
+    color:white;
+    margin-bottom:20px;
+}
+
+/* กล่องการ์ด */
+.card{
+    background:white;
+    padding:18px;
+    border-radius:16px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom:15px;
+}
+
+/* input และ select */
+input, select{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:10px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:16px;
+}
+
+/* ปุ่ม */
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#ff6b81;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* hover ปุ่ม */
+button:hover{
+    background:#ff4d6d;
+}
+
+/* รายการค่าใช้จ่าย */
+.expense-item{
+    display:flex;
+    justify-content:space-between;
+    padding:10px;
+    border-bottom:1px solid #eee;
+}
+
+/* สรุปผล */
+.summary{
+    font-weight:bold;
+    text-align:center;
+    margin-top:10px;
+}
