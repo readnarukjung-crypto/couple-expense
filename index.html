@@ -73,8 +73,14 @@ li{
 margin-bottom:10px;
 }
 
+.note{
+font-size:12px;
+color:#777;
+}
+
 .summary{
-margin-top:6px;
+margin-top:8px;
+font-size:15px;
 }
 
 .result{
@@ -82,11 +88,6 @@ font-weight:bold;
 margin-top:10px;
 font-size:16px;
 color:#ff4757;
-}
-
-.note{
-font-size:12px;
-color:#777;
 }
 
 </style>
@@ -132,7 +133,7 @@ color:#777;
 
 <b>สรุปวันนี้</b>
 
-<div id="summary"></div>
+<div class="summary" id="summary"></div>
 
 <div class="result" id="result"></div>
 
@@ -202,10 +203,7 @@ function render(){
 let list=document.getElementById("list")
 list.innerHTML=""
 
-let reda=0
-let omyim=0
-
-let detail=""
+let balance=0
 
 data.forEach((d,i)=>{
 
@@ -221,40 +219,39 @@ ${d.item} - ${d.price} บาท (${d.payer})
 
 if(d.type=="split"){
 
+let half=d.price/2
+
 if(d.payer=="เรด้า"){
-reda+=d.price/2
-omyim+=d.price/2
+balance+=half
 }else{
-reda+=d.price/2
-omyim+=d.price/2
+balance-=half
 }
 
 }else{
 
 if(d.payer=="เรด้า"){
-omyim+=d.price
+balance+=d.price
 }else{
-reda+=d.price
+balance-=d.price
 }
 
 }
 
 })
 
-document.getElementById("summary").innerText=
-"เรด้าควรจ่ายรวม: "+reda+" บาท | อมยิ้มควรจ่ายรวม: "+omyim+" บาท"
+document.getElementById("summary").innerText="ยอดคงค้าง: "+balance+" บาท"
 
-let settle=""
+let result=""
 
-if(reda>omyim){
-settle="อมยิ้มต้องคืนเรด้า "+(reda-omyim)+" บาท"
-}else if(omyim>reda){
-settle="เรด้าต้องคืนอมยิ้ม "+(omyim-reda)+" บาท"
+if(balance>0){
+result="อมยิ้มต้องคืนเรด้า "+balance+" บาท"
+}else if(balance<0){
+result="เรด้าต้องคืนอมยิ้ม "+Math.abs(balance)+" บาท"
 }else{
-settle="จ่ายพอดีกัน"
+result="จ่ายพอดีกัน"
 }
 
-document.getElementById("result").innerText="สรุป: "+settle
+document.getElementById("result").innerText="สรุป: "+result
 
 }
 
