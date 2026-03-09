@@ -9,7 +9,7 @@
 <style>
 
 body{
-font-family: "Segoe UI", sans-serif;
+font-family:"Segoe UI",sans-serif;
 max-width:420px;
 margin:auto;
 background:linear-gradient(135deg,#ff9a9e,#fad0c4);
@@ -69,16 +69,11 @@ color:white;
 margin-top:10px;
 }
 
-ul{
-padding-left:18px;
-}
-
 li{
-margin-bottom:8px;
+margin-bottom:10px;
 }
 
 .summary{
-font-size:15px;
 margin-top:6px;
 }
 
@@ -87,6 +82,11 @@ font-weight:bold;
 margin-top:10px;
 font-size:16px;
 color:#ff4757;
+}
+
+.note{
+font-size:12px;
+color:#777;
 }
 
 </style>
@@ -109,6 +109,13 @@ color:#ff4757;
 <option>อมยิ้ม</option>
 </select>
 
+<select id="type">
+<option value="split">หารกัน</option>
+<option value="advance">ออกให้ก่อน</option>
+</select>
+
+<input id="note" placeholder="หมายเหตุ (ไม่จำเป็น)">
+
 <button class="add" onclick="add()">เพิ่มรายการ</button>
 
 </div>
@@ -125,8 +132,7 @@ color:#ff4757;
 
 <b>สรุปวันนี้</b>
 
-<div class="summary" id="reda"></div>
-<div class="summary" id="omyim"></div>
+<div id="summary"></div>
 
 <div class="result" id="result"></div>
 
@@ -156,13 +162,16 @@ function add(){
 let item=document.getElementById("item").value
 let price=Number(document.getElementById("price").value)
 let payer=document.getElementById("payer").value
+let type=document.getElementById("type").value
+let note=document.getElementById("note").value
 
 if(!item||!price)return
 
-data.push({item,price,payer})
+data.push({item,price,payer,type,note})
 
 document.getElementById("item").value=""
 document.getElementById("price").value=""
+document.getElementById("note").value=""
 
 save()
 render()
@@ -196,36 +205,51 @@ list.innerHTML=""
 let reda=0
 let omyim=0
 
+let detail=""
+
 data.forEach((d,i)=>{
 
 list.innerHTML+=`
 <li>
 ${d.item} - ${d.price} บาท (${d.payer})
 <br>
+<span class="note">${d.type=="split"?"หารกัน":"ออกให้ก่อน"} ${d.note? "- "+d.note:""}</span>
+<br>
 <button class="delete" onclick="deleteItem(${i})">ลบ</button>
 </li>
 `
 
+if(d.type=="split"){
+
 if(d.payer=="เรด้า"){
-reda+=d.price
+reda+=d.price/2
+omyim+=d.price/2
 }else{
+reda+=d.price/2
+omyim+=d.price/2
+}
+
+}else{
+
+if(d.payer=="เรด้า"){
 omyim+=d.price
+}else{
+reda+=d.price
+}
+
 }
 
 })
 
-document.getElementById("reda").innerText="💁‍♀️ เรด้าจ่าย: "+reda+" บาท"
-document.getElementById("omyim").innerText="😊 อมยิ้มจ่าย: "+omyim+" บาท"
-
-let total=reda+omyim
-let half=total/2
+document.getElementById("summary").innerText=
+"เรด้าควรจ่ายรวม: "+reda+" บาท | อมยิ้มควรจ่ายรวม: "+omyim+" บาท"
 
 let settle=""
 
-if(reda>half){
-settle="อมยิ้มต้องคืนเรด้า "+(reda-half)+" บาท"
-}else if(omyim>half){
-settle="เรด้าต้องคืนอมยิ้ม "+(omyim-half)+" บาท"
+if(reda>omyim){
+settle="อมยิ้มต้องคืนเรด้า "+(reda-omyim)+" บาท"
+}else if(omyim>reda){
+settle="เรด้าต้องคืนอมยิ้ม "+(omyim-reda)+" บาท"
 }else{
 settle="จ่ายพอดีกัน"
 }
